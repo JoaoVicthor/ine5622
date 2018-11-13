@@ -7,13 +7,66 @@ ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Full
-Input = String
+Input = Stream
 Parser = SLR
 #RegularDefinitions
 L : [a-zA-Z]
 N : [0-9]
-#Tokens
+INT : {N}+
+REAL : N+"."N*|N*"."N+
+EXP : (E|e)("+"|"-")NN+
+CL : "#".("\n"|"\r\n")
 
+
+#Tokens
+literal : ('.*')*
+id : ({L}(@|_({L}|{N})|{L}|{N})*(@|_)?|@(({L}|{N})+(@|_))*({L}|{N})*)({L}|{N})*
+num_int : ({INT}{EXP}?)
+num_real : ({REAL}{EXP}?)
+\\Simples
+";"
+","
+"."
+">"
+"<"
+"="
+"("
+")"
+"["
+"]"
+"+"
+"-"
+"*"
+"/"
+":"
+\\duplos
+":="
+".."
+"<>"
+"<="
+">="
+
+programa = id :  "programa"
+inteiro = id : "inteiro"
+real = id : "real"
+booleano =  id : "booleano"
+caracter = id : "caracter"
+cadeia = id : "cadeia"
+metodo = id : "metodo"
+ref = id : "ref"
+val = id : "val"
+se = id : "se"
+entao = id : "entao"
+enquanto = id : "enquanto"
+faca = id : "faca"
+leia = id : "leia"
+escreva = id : "escreva"
+retorne = id : "retorne"
+senao = id : "senao"
+ou = id : "ou"
+div = id : "div"
+e = id : "e"
+nao = id : "nao"
 #NonTerminals
 <bloco>
 <com_composto>
