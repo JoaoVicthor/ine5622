@@ -15,14 +15,17 @@ N : [0-9]
 INT : {N}+
 REAL : N+"."N*|N*"."N+
 EXP : (E|e)("+"|"-")NN+
-CL : "#".("\n"|"\r\n")
-
-
+CC : [\ \t\n\r\s ]
+CL : "#".*{CC}*
+CB : "/*"([^"*"]|"*"[^"/"])*"*/"
 #Tokens
-literal : ('.*')*
 id : ({L}(@|_({L}|{N})|{L}|{N})*(@|_)?|@(({L}|{N})+(@|_))*({L}|{N})*)({L}|{N})*
+literal : ('.*')*
 num_int : ({INT}{EXP}?)
 num_real : ({REAL}{EXP}?)
+:{CC}
+:{CL}
+:{CB}
 //Simples
 ";"
 ","
@@ -36,6 +39,7 @@ num_real : ({REAL}{EXP}?)
 "]"
 "+"
 "-"
+"â€“"
 "*"
 "/"
 ":"
@@ -77,6 +81,7 @@ verdadeiro = id : "verdadeiro"
 
 //
 #NonTerminals
+<programa>
 <bloco>
 <com_composto>
 <comando>
@@ -97,7 +102,6 @@ verdadeiro = id : "verdadeiro"
 <op_mult>
 <oprel>
 <par_formais>
-<programa>
 <rcomid>
 <rep_expsimp>
 <rep_lexpr>
@@ -117,34 +121,33 @@ verdadeiro = id : "verdadeiro"
 <bloco> ::= <dcl_var_const>  <dcl_metodos>  <com_composto>  ;		 	
  
 <dcl_var_const> ::=  <tipo>  <dimensao>  <lid>  <fator_const> ";" <dcl_var_const> 
-                              |   î ;
+                              |    Ã® ;
 <tipo> ::=  inteiro | real | booleano | caracter | cadeia "[" <constante> "]";
 
-<dcl_const> ::= const id "=" <constante> ";"  <dcl_const>
 
-<dimensao> ::= "["  <constante>  "]"  |   î ;
+<dimensao> ::= "["  <constante>  "]"  |    Ã® ;
 
 <lid> ::= id  <rep_lid>  ;
 
-<rep_lid> ::= ","  <lid> | î ;
+<rep_lid> ::= ","  <lid> |  Ã® ;
 
-<fator_const> ::=   "="  <constante>  |   î ;
+<fator_const> ::=   "="  <constante>  |    Ã® ;
 
-<dcl_metodos> ::= <dcl_metodo>  ";"  <dcl_metodos>  |  î ;
+<dcl_metodos> ::= <dcl_metodo>  ";"  <dcl_metodos>  |   Ã® ;
 
 <dcl_metodo> ::= metodo id   <par_formais>    <tipo_metodo> ";"   <bloco>  ;                 
 
-<par_formais> ::= "(" <mp_par> <lid> ":" <tipo> <rep_par> ")" | î ;                      
+<par_formais> ::= "(" <mp_par> <lid> ":" <tipo> <rep_par> ")" |  Ã® ;                      
 
-<rep_par> ::= ";" <mp_par>  <lid>  ":"  <tipo>  <rep_par>  |  î ;
+<rep_par> ::= ";" <mp_par>  <lid>  ":"  <tipo>  <rep_par>  |   Ã® ;
 
-<tipo_metodo> ::=   ":"  <tipo>  | î ;
+<tipo_metodo> ::=   ":"  <tipo>  |  Ã® ;
 
 <mp_par>  ::= ref  |  val ;
 
 <com_composto>  ::= "{"   <comando>  <replistacomando>  "}"  ;                             
 
-<replistacomando> ::=   ";"  <comando>  <replistacomando>  |  î ;
+<replistacomando> ::=   ";"  <comando>  <replistacomando>  |   Ã® ;
 
 <comando> ::= id  <rcomid>
              |  <com_composto>                                 
@@ -153,33 +156,33 @@ verdadeiro = id : "verdadeiro"
              | leia "(" <lid> ")"                                    
              | escreva "(" <lista_expr> ")"  
              | retorne  <expressao>
-	   |  î ;
+	   |   Ã® ;
 
-<senaoparte> ::= senao  <comando>  |  î ;
+<senaoparte> ::= senao  <comando>  |   Ã® ;
 
 <rcomid> ::= ":=" <expressao> 
                    |   "[" <expressao> "]" ":=" <expressao> 
                    |   "(" <lista_expr> ")" 
-                   |   î ;
+                   |    Ã® ;
 <lista_expr>  ::=  <expressao> <rep_lexpr> ;
 
-<rep_lexpr>  ::= "," <expressao> <rep_lexpr> |  î ;
+<rep_lexpr>  ::= "," <expressao> <rep_lexpr> |   Ã® ;
 
 <expressao>  ::= <expsimp> <resto_expressao> ;
 
-<resto_expressao> ::= <oprel> <expsimp> |  î ;
+<resto_expressao> ::= <oprel> <expsimp> |   Ã®;
 
 <oprel> ::= "=" | "<" | ">" | ">=" | "<=" | "<>" ;
 
 <expsimp> ::= <termo> <rep_expsimp> ;
 
-<rep_expsimp> ::= <op_add> <termo> <rep_expsimp>  |  î ;
+<rep_expsimp> ::= <op_add> <termo> <rep_expsimp>  |   Ã® ;
                       
 <op_add> ::= "+" | "-" | ou ;
 
 <termo> ::= <fator> <rep_termo> ;
 
-<rep_termo> ::= <op_mult> <fator> <rep_termo> |  î ;
+<rep_termo> ::= <op_mult> <fator> <rep_termo> |   Ã® ;
 
 <op_mult> ::= "*" | "/" |  div |  e ;
 
@@ -191,7 +194,7 @@ verdadeiro = id : "verdadeiro"
 
 <rvar> ::= "(" <expressao> <rep_lexpr> ")"  
               |   "[" <expressao>  "]"
-              |   î ;
+              |    Ã® ;
 
 <constante> ::= id  |  <constante_explicita> ;
   
