@@ -6,9 +6,9 @@ ScannerName = Lexico
 ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = true
-ScannerTable = Full
+ScannerTable = Compact
 Input = Stream
-Parser = SLR
+Parser = LL
 #RegularDefinitions
 L : [a-zA-Z]
 N : [0-9]
@@ -39,7 +39,6 @@ num_real : ({REAL}{EXP}?)
 "]"
 "+"
 "-"
-"–"
 "*"
 "/"
 ":"
@@ -124,7 +123,6 @@ verdadeiro = id : "verdadeiro"
                               |    î ;
 <tipo> ::=  inteiro | real | booleano | caracter | cadeia "[" <constante> "]";
 
-
 <dimensao> ::= "["  <constante>  "]"  |    î ;
 
 <lid> ::= id  <rep_lid>  ;
@@ -200,4 +198,3 @@ verdadeiro = id : "verdadeiro"
   
 <constante_explicita>::=   num_int  |  num_real 
                      |  falso  |  verdadeiro  |  literal ;
-

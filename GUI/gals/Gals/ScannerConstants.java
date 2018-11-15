@@ -1,3 +1,5 @@
+package Gals;
+
 public interface ScannerConstants
 {
     int[][] SCANNER_TABLE = 
@@ -65,13 +67,10 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Caractere não esperado",
+        "Esse caractere não existe nesta linguagem",
         "",
         "",
-        "Erro identificando literal",
-        "",
-        "",
-        "",
+        "Erro na sintaxe do literal",
         "",
         "",
         "",
@@ -95,8 +94,11 @@ public interface ScannerConstants
         "",
         "",
         "",
-        "Erro identificando <ignorar>",
-        "Erro identificando num_int",
+        "",
+        "",
+        "",
+        "Erro ao ignorar",
+        "Erro de sintaxe de número inteiro",
         "",
         "",
         "",
@@ -104,13 +106,13 @@ public interface ScannerConstants
         "",
         "",
         "",
-        "Erro identificando num_real",
-        "Erro identificando <ignorar>",
-        "Erro identificando num_int",
-        "Erro identificando num_real",
+        "Erro de sintaxe de número real",
+        "Erro ao ignorar",
+        "Erro de sintaxe de número inteiro",
+        "Erro de sintaxe de número real",
         "",
-        "Erro identificando num_int",
-        "Erro identificando num_real",
+        "Erro de sintaxe de número inteiro",
+        "Erro de sintaxe de número real",
         "",
         ""
     };
