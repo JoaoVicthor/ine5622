@@ -10,18 +10,19 @@ public class Sintatico implements Constants
     private Lexico scanner;
     private Semantico semanticAnalyser;
 
-    public void parse(Lexico scanner, Semantico semanticAnalyser) throws LexicalError, SyntaticError, SemanticError
+    private static final boolean isTerminal(int x)
     {
-        this.scanner = scanner;
-        this.semanticAnalyser = semanticAnalyser;
+        return x < FIRST_NON_TERMINAL;
+    }
 
-        stack.clear();
-        stack.push(new Integer(0));
+    private static final boolean isNonTerminal(int x)
+    {
+        return x >= FIRST_NON_TERMINAL && x < FIRST_SEMANTIC_ACTION;
+    }
 
-        currentToken = scanner.nextToken();
-
-        while ( ! step() )
-            ;
+    private static final boolean isSemanticAction(int x)
+    {
+        return x >= FIRST_SEMANTIC_ACTION;
     }
 
     private boolean step() throws LexicalError, SyntaticError, SemanticError
@@ -35,42 +36,74 @@ public class Sintatico implements Constants
             currentToken = new Token(DOLLAR, "$", pos);
         }
 
-        int token = currentToken.getId();
-        int state = ((Integer)stack.peek()).intValue();
+        int x = ((Integer)stack.pop()).intValue();
+        int a = currentToken.getId();
 
-        int[] cmd = PARSER_TABLE[state][token-1];
-
-        switch (cmd[0])
+        if (x == EPSILON)
         {
-            case SHIFT:
-                stack.push(new Integer(cmd[1]));
-                previousToken = currentToken;
-                currentToken = scanner.nextToken();
-                return false;
-
-            case REDUCE:
-                int[] prod = PRODUCTIONS[cmd[1]];
-
-                for (int i=0; i<prod[1]; i++)
-                    stack.pop();
-
-                int oldState = ((Integer)stack.peek()).intValue();
-                stack.push(new Integer(PARSER_TABLE[oldState][prod[0]-1][1]));
-                return false;
-
-            case ACTION:
-                int action = FIRST_SEMANTIC_ACTION + cmd[1] - 1;
-                stack.push(new Integer(PARSER_TABLE[state][action][1]));
-                semanticAnalyser.executeAction(cmd[1], previousToken);
-                return false;
-
-            case ACCEPT:
-                return true;
-
-            case ERROR:
-                throw new SyntaticError(PARSER_ERROR[state], currentToken.getPosition());
+            return false;
         }
-        return false;
+        else if (isTerminal(x))
+        {
+            if (x == a)
+            {
+                if (stack.empty())
+                    return true;
+                else
+                {
+                    previousToken = currentToken;
+                    currentToken = scanner.nextToken();
+                    return false;
+                }
+            }
+            else
+            {
+                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
+            }
+        }
+        else if (isNonTerminal(x))
+        {
+            if (pushProduction(x, a))
+                return false;
+            else
+                throw new SyntaticError(PARSER_ERROR[x], currentToken.getPosition());
+        }
+        else // isSemanticAction(x)
+        {
+            semanticAnalyser.executeAction(x-FIRST_SEMANTIC_ACTION, previousToken);
+            return false;
+        }
     }
 
+    private boolean pushProduction(int topStack, int tokenInput)
+    {
+        int p = PARSER_TABLE[topStack-FIRST_NON_TERMINAL][tokenInput-1];
+        if (p >= 0)
+        {
+            int[] production = PRODUCTIONS[p];
+            //empilha a produção em ordem reversa
+            for (int i=production.length-1; i>=0; i--)
+            {
+                stack.push(new Integer(production[i]));
+            }
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public void parse(Lexico scanner, Semantico semanticAnalyser) throws LexicalError, SyntaticError, SemanticError
+    {
+        this.scanner = scanner;
+        this.semanticAnalyser = semanticAnalyser;
+
+        stack.clear();
+        stack.push(new Integer(DOLLAR));
+        stack.push(new Integer(START_SYMBOL));
+
+        currentToken = scanner.nextToken();
+
+        while ( ! step() )
+            ;
+    }
 }
