@@ -27,6 +27,7 @@ public class compilaFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -35,23 +36,26 @@ public class compilaFrame extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(700, 500));
-        getContentPane().setLayout(new java.awt.GridBagLayout());
+        setMinimumSize(new java.awt.Dimension(800, 800));
 
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(320, 220));
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jScrollPane1.setPreferredSize(null);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setPreferredSize(null);
         jScrollPane1.setViewportView(jTextArea1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 12;
-        getContentPane().add(jScrollPane1, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel1.add(jScrollPane1, gridBagConstraints);
 
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(320, 220));
+        jScrollPane2.setPreferredSize(null);
 
         jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
@@ -59,28 +63,42 @@ public class compilaFrame extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextArea2);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.gridheight = 12;
-        getContentPane().add(jScrollPane2, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel1.add(jScrollPane2, gridBagConstraints);
 
         jButton1.setText("Análise Léxica");
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
-        getContentPane().add(jButton1, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel1.add(jButton1, gridBagConstraints);
 
         jButton2.setText("Análise Sintática");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 14;
         gridBagConstraints.gridwidth = 2;
-        getContentPane().add(jButton2, gridBagConstraints);
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel1.add(jButton2, gridBagConstraints);
+
+        getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,6 +138,7 @@ public class compilaFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
