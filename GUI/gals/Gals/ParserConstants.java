@@ -134,13 +134,12 @@ public interface ParserConstants
     };
 
     String[] PARSER_ERROR =
-    {
-        "",
-        "Era esperado fim de programa",
-        "Era esperado id",
+       { "",
+        "Era esperado o fim do programa",
+        "Era esperado um identificador",
         "Era esperado literal",
-        "Era esperado num_int",
-        "Era esperado num_real",
+        "Era esperado um numero inteiro",
+        "Era esperado um numero real",
         "Era esperado \";\"",
         "Era esperado \",\"",
         "Era esperado \".\"",
@@ -187,39 +186,39 @@ public interface ParserConstants
         "Era esperado nao",
         "Era esperado falso",
         "Era esperado verdadeiro",
-        "<programa> inválido",
-        "<bloco> inválido",
-        "<com_composto> inválido",
-        "<comando> inválido",
-        "<constante> inválido",
-        "<constante_explicita> inválido",
-        "<dcl_metodo> inválido",
-        "<dcl_metodos> inválido",
-        "<dcl_var_const> inválido",
-        "<dimensao> inválido",
-        "<expressao> inválido",
-        "<expsimp> inválido",
-        "<fator> inválido",
-        "<fator_const> inválido",
-        "<lid> inválido",
-        "<lista_expr> inválido",
-        "<mp_par> inválido",
-        "<op_add> inválido",
-        "<op_mult> inválido",
-        "<oprel> inválido",
-        "<par_formais> inválido",
-        "<rcomid> inválido",
-        "<rep_expsimp> inválido",
-        "<rep_lexpr> inválido",
-        "<rep_lid> inválido",
-        "<rep_par> inválido",
-        "<rep_termo> inválido",
-        "<replistacomando> inválido",
-        "<resto_expressao> inválido",
-        "<rvar> inválido",
-        "<senaoparte> inválido",
-        "<termo> inválido",
-        "<tipo> inválido",
-        "<tipo_metodo> inválido"
+        "Era esperado programa", //<programa>
+        "Era esperado \"{\", inteiro, real, booleano, caracter, cadeia, metodo",//<bloco>
+        "Era esperado \"{\"",//<com_composto>
+        "Era esperado id, \"{\", se, enquanto, leia, escreva, retorne", //<comando>
+        "Era esperado id, literal, um numero inteiro, um numero real, falso, verdadeiro", //<constante>
+        "Era esperado literal, um numero inteiro, um numero real, falso, verdadeiro", //<constante_explicita>
+        "Era esperado metodo", //<dcl_metodo>
+        "Era esperado metodo", //<dcl_metodos> 
+        "Era esperado inteiro, real, booleano, caracter, cadeia", //<dcl_var_const>
+        "Era esperado \"[\"", //<dimensao>
+        "Era esperado id, literal, um numero inteiro, um numero real, \"(\", \"-\", nao, falso, verdadeiro", //<expressao>
+        "Era esperado id, literal, um numero inteiro, um numero real, \"(\", \"-\", nao, falso, verdadeiro", //<expsimp>
+        "Era esperado id, literal, um numero inteiro, um numero real, \"(\", \"-\", nao, falso, verdadeiro", //<fator>
+        "Era esperado \"=\"", //<fator_const>
+        "Era esperado id", //<lid>
+        "Era esperado id, literal, um numero inteiro, um numero real, \"(\", \"-\", nao, falso, verdadeiro", //<lista_expr>
+        "Era esperado ref, val", //<mp_par>
+        "Era esperado \"+\", \"-\", ou", //<op_add>
+        "Era esperado \"*\", \"/\", div, e", //<op_mult>
+        "Era esperado \">\", \"<\", \"=\", \"<>\", \"<=\", \">=\"", //<oprel>
+        "Era esperado \"(\"", //<par_formais>
+        "Era esperado \"(\", \"[\", \":=\"", //<rcomid>
+        "Era esperado  \"+\", \"-\", ou",//<rep_expsimp>
+        "Era esperado \",\"", //<rep_lexpr>
+        "Era esperado \",\"", //<rep_lid>
+        "Era esperado \";\"", //<rep_par>
+        "Era esperado \"*\", \"/\", div, e", //<rep_termo>
+        "Era esperado \";\"", //<replistacomando>
+        "Era esperado \">\", \"<\", \"=\", \"<>\", \"<=\", \">=\"", //<resto_expressao> 
+        "Era esperado \"(\", \"[\"", //<rvar>
+        "Era esperado senao", //<senaoparte>
+        "Era esperado id, literal, um numero inteiro, um numero real, \"(\", \"-\", nao, falso, verdadeiro", //<termo>
+        "Era esperado inteiro, real, booleano, caracter, cadeia", //<tipo>
+        "Era esperado \":\"" //<tipo_metodo>
     };
 }

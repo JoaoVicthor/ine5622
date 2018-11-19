@@ -5,15 +5,15 @@ Language = Java
 ScannerName = Lexico
 ParserName = Sintatico
 SemanticName = Semantico
-ScannerCaseSensitive = true
+ScannerCaseSensitive = false
 ScannerTable = Compact
-Input = Stream
+Input = String
 Parser = LL
 #RegularDefinitions
 L : [a-zA-Z]
 N : [0-9]
 INT : {N}+
-REAL : N+"."N*|N*"."N+
+REAL : {INT}"."{INT}*|{INT}*"."{INT}
 EXP : (E|e)("+"|"-")NN+
 CC : [\ \t\n\r\s ]
 CL : "#".*{CC}*
