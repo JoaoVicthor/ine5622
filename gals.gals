@@ -47,7 +47,6 @@ num_real : ({REAL}{EXP}?)
 "{"
 //duplos
 ":="
-".."
 "<>"
 "<="
 ">="
@@ -55,7 +54,6 @@ num_real : ({REAL}{EXP}?)
 programa = id :  "programa"
 inteiro = id : "inteiro"
 real = id : "real"
-const = id :"const"
 booleano =  id : "booleano"
 caracter = id : "caracter"
 cadeia = id : "cadeia"

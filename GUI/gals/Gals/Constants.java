@@ -1,4 +1,5 @@
-package Gals;
+ package Gals;
+
 public interface Constants extends ScannerConstants, ParserConstants
 {
     int EPSILON  = 0;
@@ -26,33 +27,65 @@ public interface Constants extends ScannerConstants, ParserConstants
     int t_TOKEN_21 = 21; //"}"
     int t_TOKEN_22 = 22; //"{"
     int t_TOKEN_23 = 23; //":="
-    int t_TOKEN_24 = 24; //".."
-    int t_TOKEN_25 = 25; //"<>"
-    int t_TOKEN_26 = 26; //"<="
-    int t_TOKEN_27 = 27; //">="
-    int t_programa = 28;
-    int t_inteiro = 29;
-    int t_real = 30;
-    int t_const = 31;
-    int t_booleano = 32;
-    int t_caracter = 33;
-    int t_cadeia = 34;
-    int t_metodo = 35;
-    int t_ref = 36;
-    int t_val = 37;
-    int t_se = 38;
-    int t_entao = 39;
-    int t_enquanto = 40;
-    int t_faca = 41;
-    int t_leia = 42;
-    int t_escreva = 43;
-    int t_retorne = 44;
-    int t_senao = 45;
-    int t_ou = 46;
-    int t_div = 47;
-    int t_e = 48;
-    int t_nao = 49;
-    int t_falso = 50;
-    int t_verdadeiro = 51;
+    int t_TOKEN_24 = 24; //"<>"
+    int t_TOKEN_25 = 25; //"<="
+    int t_TOKEN_26 = 26; //">="
+    int t_programa = 27;
+    int t_inteiro = 28;
+    int t_real = 29;
+    int t_booleano = 30;
+    int t_caracter = 31;
+    int t_cadeia = 32;
+    int t_metodo = 33;
+    int t_ref = 34;
+    int t_val = 35;
+    int t_se = 36;
+    int t_entao = 37;
+    int t_enquanto = 38;
+    int t_faca = 39;
+    int t_leia = 40;
+    int t_escreva = 41;
+    int t_retorne = 42;
+    int t_senao = 43;
+    int t_ou = 44;
+    int t_div = 45;
+    int t_e = 46;
+    int t_nao = 47;
+    int t_falso = 48;
+    int t_verdadeiro = 49;
+    
+    //atributos
+    
+    String a_tipovar = "tipoVar";
+    String a_categoria = "categoria";
+    String a_nivel = "nivel";
+    String a_valor = "valor";
+    String a_desloc = "deslocamento";
+    String a_tamanho = "tamanho";
+    String a_tipovet = "tipoVetor";
+    String a_endereco = "endereco";
+    String a_nparam = "nroParametros";
+    String a_pontparam = "ponteiroParametro";
+    String a_tipores = "tipoResultadoFuncao";
+    String a_mecpass = "mecanismoPassagem";
+    
+    //contextoLID
+    String l_decl = "decl";
+    String l_parformal = "par-formal";
+    String l_leitura = "leitura";
+    
+    //contextoEXPR
+    String e_impr = "impressao";
+    String e_par = "par-atual";
+    
+    //categorias
+    String c_programa = "programa";
+    String c_constante = "constante";
+    String c_variavel = "variavel";
+    String c_metodo = "metodo";
+    String c_parametro = "parametro";
 
+    //MPP
+    String m_ref = "referencia";
+    String m_val = "valor";
 }
