@@ -55,14 +55,14 @@ public interface Constants extends ScannerConstants, ParserConstants
     int t_verdadeiro = 49;
     
     //atributos
-    
+    String a_nome = "nome";
     String a_tipovar = "tipoVar";
     String a_categoria = "categoria";
     String a_nivel = "nivel";
     String a_valor = "valor";
     String a_desloc = "deslocamento";
     String a_tamanho = "tamanho";
-    String a_tipovet = "tipoVetor";
+    String a_subcateg = "subCategoria";
     String a_endereco = "endereco";
     String a_nparam = "nroParametros";
     String a_pontparam = "ponteiroParametro";
@@ -88,4 +88,9 @@ public interface Constants extends ScannerConstants, ParserConstants
     //MPP
     String m_ref = "referencia";
     String m_val = "valor";
+    
+    //subcategorias
+    String s_vetor = "vetor";
+    String s_cadeia = "cadeia";
+    String s_predef = "preDefinido";
 }
