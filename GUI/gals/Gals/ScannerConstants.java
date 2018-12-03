@@ -1,5 +1,4 @@
 package Gals;
-
 public interface ScannerConstants
 {
     int[] SCANNER_TABLE_INDEXES = 
@@ -1436,11 +1435,10 @@ public interface ScannerConstants
 
     String[] SCANNER_ERROR =
     {
-        "Caractere não existente na linguagem",
+        "Caractere não esperado",
         "",
         "",
         "Erro ao identificar literal",
-        "",
         "",
         "",
         "",
