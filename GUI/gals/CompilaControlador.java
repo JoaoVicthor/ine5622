@@ -27,15 +27,14 @@ public class CompilaControlador {
 	private Semantico semantico;
 
 	public CompilaControlador() {
-		listaTokens = new ArrayList<Token>();
+		listaTokens = new ArrayList<>();
 		lexico = new Lexico();
 		sintatico = new Sintatico();
-		semantico = new Semantico();
 		
 	}
 
 	public List<Token> analisarLexico(String texto) throws LexicalError {
-		List<Token> tokens = new ArrayList<Token>();
+		List<Token> tokens = new ArrayList<>();
 		lexico.setInput(texto);
 		Token t = lexico.nextToken();
 		while (t != null) {
@@ -48,12 +47,12 @@ public class CompilaControlador {
 
 	public void analisarSintatico(String texto) throws LexicalError, SyntaticError, SemanticError {
 		lexico.setInput(texto);
-		semantico = new Semantico();
+		semantico = new Semantico(true);
 		sintatico.parse(lexico, semantico);
 	}
 	
 	public void analisarSemantico(String texto) throws LexicalError, SyntaticError, SemanticError {
-			semantico = new Semantico();
+			semantico = new Semantico(true);
 			lexico.setInput(texto);
 			sintatico.parse(lexico, semantico);
 	

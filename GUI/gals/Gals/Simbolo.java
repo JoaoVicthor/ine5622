@@ -13,7 +13,7 @@ import java.util.HashMap;
  * @author joao
  */
 class Simbolo {
-    HashMap<String, Object> atributos;
+    HashMap<String, Object> atributos = new HashMap<>();
 
     public Simbolo(String nome,int nivel) {
         putAtributo("nome", nome);

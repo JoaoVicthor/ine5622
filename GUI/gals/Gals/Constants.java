@@ -61,7 +61,8 @@ public interface Constants extends ScannerConstants, ParserConstants
     String a_nivel = "nivel";
     String a_valor = "valor";
     String a_desloc = "deslocamento";
-    String a_tamanho = "tamanho";
+    String a_numElem = "numeroDeElementos";
+    String a_elementos = "elementos";
     String a_subcateg = "subCategoria";
     String a_endereco = "endereco";
     String a_nparam = "nroParametros";

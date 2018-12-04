@@ -12,7 +12,7 @@ import java.util.HashMap;
  * @author joao
  */
 public class TabelaDeSimbolos {
-    HashMap<String,Simbolo> simbolos;
+    HashMap<String,Simbolo> simbolos = new HashMap<>();
     int nivel;
 
     public TabelaDeSimbolos(int nivel) {
