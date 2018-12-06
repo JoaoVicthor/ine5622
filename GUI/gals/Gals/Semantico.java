@@ -13,7 +13,7 @@ public class Semantico implements Constants {
     int deslocamento;
     int tipoAtual;
     int tipoLadoEsq;
-    int tipoVarInd;
+    String subCategVarInd;
     int tipoConst;
     int tipoExpr;
     int numParamFormais;
@@ -22,6 +22,7 @@ public class Semantico implements Constants {
 
     Object valConst;
     String metodoAtual;
+    String idAtual;
 
     boolean metTemTipo;
     boolean opNega;
@@ -124,7 +125,7 @@ public class Semantico implements Constants {
                     break;
 
                 case 110:
-                    if (tipoAtual == t_cadeia) {
+                    if (comparaTipos(tipoAtual, t_cadeia)) {
                         throw new SemanticError("Vetor do tipo cadeia não é permitido");
                     } else {
                         subcategoria = s_vetor;
@@ -140,7 +141,7 @@ public class Semantico implements Constants {
                     break;
 
                 case 112:
-                    if (tipoAtual == t_cadeia) {
+                    if (comparaTipos(tipoAtual, t_cadeia)) {
                         subcategoria = s_cadeia;
                     } else {
                         subcategoria = s_predef;
@@ -245,7 +246,66 @@ public class Semantico implements Constants {
                 case 127:
                     MPP = m_val;
                     break;
+                    
+                case 128:
+                    if(checkDeclId(lexeme, nivelAtual, l_leitura)){
+                        idAtual = lexeme;
+                    }
+                    break;
                 
+                case 133:
+                    if(getSimbolo(idAtual).getAtributo(a_categoria).equals(c_variavel)
+                    || getSimbolo(idAtual).getAtributo(a_categoria).equals(c_parametro))
+                    {
+                        if(getSimbolo(idAtual).getAtributo(a_tipovar) != s_vetor){
+                            tipoLadoEsq = (Integer) getSimbolo(idAtual).getAtributo(a_tipovar);
+                        }
+                        else{
+                            throw new SemanticError("Identificador deveria estar indexado.");
+                        }
+                    }
+                    else{
+                        throw new SemanticError("identificador deveria ser variavel ou parametro");
+                    }
+                    break;
+                    
+                case 134:
+                    if(comparaTipos(tipoLadoEsq, tipoExpr)){
+                        // Gera codigo
+                    }
+                    else{
+                        throw new SemanticError("Tipos incompativeis");
+                    }
+                    break;
+                    
+                case 135:
+                    if(getSimbolo(idAtual).getAtributo(a_categoria).equals(c_variavel)){
+                        if(!getSimbolo(idAtual).getAtributo(a_subcateg).equals(s_predef)){
+                            subCategVarInd = (String) getSimbolo(idAtual).getAtributo(a_subcateg);
+                        }
+                        else{
+                            throw new SemanticError("Apenas vetores e cadeias podem ser indexados");
+                        }
+                    }
+                    else{
+                        throw new SemanticError("esperava-se uma variavel");
+                    }
+                    break;
+                    
+                case 136:
+                    if(tipoExpr != t_inteiro){
+                        if(subCategVarInd.equals(s_cadeia)){
+                            tipoLadoEsq = t_caracter;
+                        }
+                        else{
+                            tipoLadoEsq = (Integer) getSimbolo(idAtual).getAtributo(a_tipovar);
+                        }
+                    }
+                    else{
+                        throw new SemanticError("Indice deveria ser inteiro");
+                    }
+                    break;
+                    
                 case 175:
                     if (!getSimbolo(lexeme).getAtributo(a_categoria).equals(c_constante)) {
                         throw new SemanticError("id de Constante esperado");
@@ -337,5 +397,28 @@ public class Semantico implements Constants {
         simbolo.putAtributo(a_nivel, nivel);
         tabelas.get(nivel).put(nome, simbolo);
         return simbolo;
+    }
+    
+    private boolean comparaTipos(int esquerdo, int direito){
+        switch(esquerdo){
+            case t_real:
+                if(direito == t_inteiro){
+                    return true;
+                }
+                else{
+                    return direito == t_real;
+                }
+            
+            case t_cadeia:
+                if(direito == t_caracter){
+                    return true;
+                }
+                else{
+                    return direito == t_cadeia;
+                }
+             
+            default:
+                return esquerdo == direito;
+        }   
     }
 }
