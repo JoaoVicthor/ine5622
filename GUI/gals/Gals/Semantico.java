@@ -21,6 +21,7 @@ public class Semantico implements Constants {
     int numElementos;
 
     Object valConst;
+    String metodoAtual;
 
     boolean metTemTipo;
     boolean opNega;
@@ -31,6 +32,7 @@ public class Semantico implements Constants {
     String subcategoria;
     String contextoLID;
     String contextoEXPR;
+    String MPP;
     ArrayList<Simbolo> LID = new ArrayList<>();
     //HashMap<String,Simbolo> tabela;
     ArrayList<TabelaDeSimbolos> tabelas = new ArrayList<>();
@@ -178,7 +180,72 @@ public class Semantico implements Constants {
                 case 116:
                     categoriaAtual = c_variavel;
                     break;
+                    
+                case 117:
+                    if(!checkDeclId(lexeme, nivelAtual, contextoLID)){
+                        Simbolo met = addSimbolo(lexeme, nivelAtual, contextoLID);
+                        met.putAtributo(a_categoria, c_metodo);
+                        metodoAtual = lexeme;
+                        numParamFormais = 0;
+                        nivelAtual++;
+                    }
+                    break;
+                    
+                case 118:
+                    getSimbolo(metodoAtual).putAtributo(a_nparam, numParamFormais);
+                    break;
+                
+                case 119: 
+                    break;
+               
+                case 120:
+                    tabelas.remove(nivelAtual);
+                    nivelAtual--;
+                    
+                case 121:
+                    contextoLID = l_parformal;
+                    break;
+                 
+                case 122:
+                    break;
+                    
+                case 123:
+                    if(subcategoria.equals(s_predef)){
+                        ArrayList<Simbolo> params = new ArrayList<>();
+                        getSimbolo(metodoAtual).putAtributo(a_listaParam, params);
+                        for(Simbolo s : LID){
+                            s.putAtributo(a_categoria, c_parametro);
+                            s.putAtributo(a_MPP, MPP);
+                            s.putAtributo(a_tipovar, tipoAtual);
+                            params.add(s);
+                        }
+                    }
+                    else{
+                        throw new SemanticError("Parametros devem ser de tipo pre-definido");
+                    }
+                    break;
+                    
+                case 124:
+                    if(tipoAtual != t_cadeia){
+                        getSimbolo(metodoAtual).putAtributo(a_tipovar, tipoAtual);
+                    }
+                    else{
+                        throw new SemanticError("Metodos devem ser de tipo predefinido");
+                    }
+                    break;
+                    
+                case 125:
+                    getSimbolo(metodoAtual).putAtributo(a_tipovar, t_nulo);
+                    break;
+                    
+                case 126:
+                    MPP = m_ref;
+                    break;
 
+                case 127:
+                    MPP = m_val;
+                    break;
+                
                 case 175:
                     if (!getSimbolo(lexeme).getAtributo(a_categoria).equals(c_constante)) {
                         throw new SemanticError("id de Constante esperado");
@@ -228,7 +295,7 @@ public class Semantico implements Constants {
     }
 
     Simbolo getSimbolo(String nome) throws SemanticError {
-        for (int nivel = nivelAtual; nivel >= 0; nivel++) {
+        for (int nivel = nivelAtual; nivel >= 0; nivel--) {
             if (tabelas.get(nivel).containsKey(nome)) {
                 return tabelas.get(nivel).get(nome);
             }

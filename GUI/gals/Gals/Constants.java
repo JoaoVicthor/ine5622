@@ -53,6 +53,7 @@ public interface Constants extends ScannerConstants, ParserConstants
     int t_nao = 47;
     int t_falso = 48;
     int t_verdadeiro = 49;
+    int t_nulo = 50;
     
     //atributos
     String a_nome = "nome";
@@ -66,9 +67,9 @@ public interface Constants extends ScannerConstants, ParserConstants
     String a_subcateg = "subCategoria";
     String a_endereco = "endereco";
     String a_nparam = "nroParametros";
-    String a_pontparam = "ponteiroParametro";
-    String a_tipores = "tipoResultadoFuncao";
-    String a_mecpass = "mecanismoPassagem";
+    String a_listaParam = "listaDeParametros";
+    //String a_tipores = "tipoResultadoFuncao";
+    String a_MPP = "mecanismoPassagem";
     
     //contextoLID
     String l_decl = "decl";
