@@ -8,6 +8,7 @@ import java.util.Stack;
 public class Semantico implements Constants {
 
     boolean checarSemantica;
+    int posicao;
 
     int nivelAtual;
     int deslocamento;
@@ -16,6 +17,8 @@ public class Semantico implements Constants {
     String subCategVarInd;
     int tipoConst;
     int tipoExpr;
+    int tipoExprSimples;
+    int tipoTermo;
     int numParamFormais;
     int numParamAtuais;
     int numElementos;
@@ -23,6 +26,7 @@ public class Semantico implements Constants {
     Object valConst;
     String metodoAtual;
     String idAtual;
+    String operador;
 
     boolean metTemTipo;
     boolean opNega;
@@ -37,6 +41,7 @@ public class Semantico implements Constants {
     ArrayList<Simbolo> LID = new ArrayList<>();
     //HashMap<String,Simbolo> tabela;
     ArrayList<TabelaDeSimbolos> tabelas = new ArrayList<>();
+   
 
     public Semantico(boolean checarSemantica) {
         this.checarSemantica = checarSemantica;
@@ -48,6 +53,7 @@ public class Semantico implements Constants {
 
             System.out.println("Ação #" + action + ", Token: " + token);
             String lexeme = token.getLexeme();
+            this.posicao = token.getPosition();
             switch (action) {
                 default:
                     break;
@@ -116,9 +122,9 @@ public class Semantico implements Constants {
 
                 case 109:
                     if (tipoConst != t_inteiro) {
-                        throw new SemanticError("Esperava-se uma constante inteira");
+                        throw new SemanticError("Esperava-se uma constante inteira", posicao);
                     } else if (Integer.parseInt((String) valConst) > 256) {
-                        throw new SemanticError("Cadeia maior que o permitido");
+                        throw new SemanticError("Cadeia maior que o permitido", posicao);
                     } else {
                         tipoAtual = t_cadeia;
                     }
@@ -126,7 +132,7 @@ public class Semantico implements Constants {
 
                 case 110:
                     if (comparaTipos(tipoAtual, t_cadeia)) {
-                        throw new SemanticError("Vetor do tipo cadeia não é permitido");
+                        throw new SemanticError("Vetor do tipo cadeia não é permitido", posicao);
                     } else {
                         subcategoria = s_vetor;
                     }
@@ -134,7 +140,7 @@ public class Semantico implements Constants {
 
                 case 111:
                     if (tipoConst != t_inteiro) {
-                        throw new SemanticError("A dimensao deve ser uma constante inteira");
+                        throw new SemanticError("A dimensao deve ser uma constante inteira", posicao);
                     } else {
                         numElementos = Integer.parseInt((String) valConst);
                     }
@@ -156,7 +162,7 @@ public class Semantico implements Constants {
                                     && (!getSimbolo(lexeme).getAtributo(a_tipovar).equals(t_booleano))) {
                                 //Gera cod para leitura
                             } else {
-                                throw new SemanticError("Tipo invalido para leitura");
+                                throw new SemanticError("Tipo invalido para leitura", posicao);
                             }
                         }
                     } else {
@@ -166,15 +172,15 @@ public class Semantico implements Constants {
 
                 case 114:
                     if (subcategoria.equals(s_cadeia) || subcategoria.equals(s_vetor)) {
-                        throw new SemanticError("Apenas id's de tipo pre-definido podem ser declarados como constante");
+                        throw new SemanticError("Apenas id's de tipo pre-definido podem ser declarados como constante", posicao);
                     } else {
                         categoriaAtual = c_constante;
                     }
                     break;
 
                 case 115:
-                    if (tipoConst != tipoAtual) {
-                        throw new SemanticError("Tipo da constante incorreto");
+                    if (!comparaTipos(tipoAtual, tipoConst)) {
+                        throw new SemanticError("Tipo da constante incorreto", posicao);
                     }
                     break;
 
@@ -222,7 +228,7 @@ public class Semantico implements Constants {
                         }
                     }
                     else{
-                        throw new SemanticError("Parametros devem ser de tipo pre-definido");
+                        throw new SemanticError("Parametros devem ser de tipo pre-definido", posicao);
                     }
                     break;
                     
@@ -231,7 +237,7 @@ public class Semantico implements Constants {
                         getSimbolo(metodoAtual).putAtributo(a_tipovar, tipoAtual);
                     }
                     else{
-                        throw new SemanticError("Metodos devem ser de tipo predefinido");
+                        throw new SemanticError("Metodos devem ser de tipo predefinido", posicao);
                     }
                     break;
                     
@@ -261,11 +267,11 @@ public class Semantico implements Constants {
                             tipoLadoEsq = (Integer) getSimbolo(idAtual).getAtributo(a_tipovar);
                         }
                         else{
-                            throw new SemanticError("Identificador deveria estar indexado.");
+                            throw new SemanticError("Identificador deveria estar indexado.", posicao);
                         }
                     }
                     else{
-                        throw new SemanticError("identificador deveria ser variavel ou parametro");
+                        throw new SemanticError("identificador deveria ser variavel ou parametro", posicao);
                     }
                     break;
                     
@@ -274,7 +280,7 @@ public class Semantico implements Constants {
                         // Gera codigo
                     }
                     else{
-                        throw new SemanticError("Tipos incompativeis");
+                        throw new SemanticError("Tipos incompativeis", posicao);
                     }
                     break;
                     
@@ -284,11 +290,11 @@ public class Semantico implements Constants {
                             subCategVarInd = (String) getSimbolo(idAtual).getAtributo(a_subcateg);
                         }
                         else{
-                            throw new SemanticError("Apenas vetores e cadeias podem ser indexados");
+                            throw new SemanticError("Apenas vetores e cadeias podem ser indexados", posicao);
                         }
                     }
                     else{
-                        throw new SemanticError("esperava-se uma variavel");
+                        throw new SemanticError("esperava-se uma variavel", posicao);
                     }
                     break;
                     
@@ -302,13 +308,108 @@ public class Semantico implements Constants {
                         }
                     }
                     else{
-                        throw new SemanticError("Indice deveria ser inteiro");
+                        throw new SemanticError("Indice deveria ser inteiro", posicao);
                     }
+                    break;
+                    
+                case 137:
+                    if(getSimbolo(idAtual).getAtributo(a_categoria).equals(c_metodo)){
+                        if(!getSimbolo(idAtual).getAtributo(a_tipovar).equals(t_nulo)){
+                            throw new SemanticError("Esperava-se metodo sem tipo", posicao);
+                        }
+                        else{
+                            //gera codigo
+                        }
+                    }
+                    else{
+                        throw new SemanticError("Id deveria ser de metodo", posicao);
+                    }
+                    break;
+                    
+                case 138:
+                    numParamAtuais = 0;
+                    contextoEXPR = e_par;
+                    break;
+                 
+                case 139:
+                    if (numParamAtuais == numParamFormais){
+                        //Gera codigo
+                    }
+                    else{
+                        throw new SemanticError("Erro na quantidade de parametros", posicao);
+                    }
+                    break;
+                    
+                case 140:
+                    if(getSimbolo(idAtual).getAtributo(a_categoria).equals(c_metodo)){
+                        if(getSimbolo(idAtual).getAtributo(a_tipovar).equals(t_nulo)){
+                            if(numParamAtuais == 0){
+                                //gera codigo
+                            }
+                            else{
+                                throw new SemanticError("Erro na quantidade de parametros", posicao);
+                            }
+                        }
+                        else{
+                            throw new SemanticError("Esperava-se metodo sem tipo", posicao);                            
+                        }
+                    }
+                    else{
+                        throw new SemanticError("Id deveria ser de metodo", posicao);
+                    }
+                    break;
+                    
+                case 141:
+                    if(contextoEXPR.equals(e_par)){
+                        numParamAtuais++;
+                        ArrayList<Simbolo> listaParam = (ArrayList<Simbolo>) getSimbolo(idAtual).getAtributo(a_listaParam);
+                        if(MPP.equals(listaParam.get(numParamAtuais-1).getAtributo(a_MPP))){
+                            if(!comparaTipos(tipoExpr, (Integer) listaParam.get(numParamAtuais-1).getAtributo(a_tipovar))){
+                                throw new SemanticError("Tipo de expressão diferente do esperado", posicao);
+                            }
+                        }
+                        else{
+                            throw new SemanticError("Metodo de passagem de parametro diferente do esperado", posicao);
+                        }
+                    }
+                    else if (contextoEXPR.equals(e_impr)){
+                        if(tipoExpr == t_booleano){
+                            throw new SemanticError("Tipo invalido para impressao", posicao);
+                        }
+                        else{
+                            //gera cod
+                        }
+                    }
+                    break;
+                    
+                case 142:
+                    tipoExpr = tipoExprSimples;
+                    break;
+                    
+                case 143:
+                    if(comparaTipos(tipoExpr, tipoExprSimples)){
+                        tipoExpr = t_booleano;
+                    }
+                    else{
+                        throw new SemanticError("Operandos incompativeis", posicao);
+                    }
+                    break;
+                    
+                case 144-149:
+                    operador = lexeme;
+                    break;
+                
+                case 150:
+                    tipoExprSimples = tipoTermo;
+                    break;
+                
+                case 151:
+                    
                     break;
                     
                 case 175:
                     if (!getSimbolo(lexeme).getAtributo(a_categoria).equals(c_constante)) {
-                        throw new SemanticError("id de Constante esperado");
+                        throw new SemanticError("id de Constante esperado", posicao);
                     } else {
                         tipoConst = (Integer) getSimbolo(lexeme).getAtributo(a_tipovar);
                     }
@@ -348,10 +449,13 @@ public class Semantico implements Constants {
     Simbolo addSimbolo(String nome, int nivel, String contexto) throws SemanticError {
         if (nivel >= tabelas.size()) {
             tabelas.add(new TabelaDeSimbolos(nivel));
-        } else if (checkDeclId(nome, nivel, contexto)) {
-            //throws exception no checkDeclId Id ja existe
         }
-        return createSimbolo(nome, nivel);
+        if (!checkDeclId(nome, nivel, contexto)) {
+            Simbolo simbolo = createSimbolo(nome, nivel);
+            tabelas.get(nivel).put(nome, simbolo);
+            return simbolo;
+        }
+        return null;
     }
 
     Simbolo getSimbolo(String nome) throws SemanticError {
@@ -360,7 +464,7 @@ public class Semantico implements Constants {
                 return tabelas.get(nivel).get(nome);
             }
         }
-        throw new SemanticError("Id não declarado");
+        throw new SemanticError("Id não declarado", posicao);
     }
 
     void addLID(String nome, int nivel, String contexto) throws SemanticError {
@@ -374,19 +478,19 @@ public class Semantico implements Constants {
 
     boolean checkDeclId(String nome, int nivel, String contexto) throws SemanticError {
         if (nome.equals(nomeDoPrograma)) {
-            throw new SemanticError("Nenhum identificador pode ter o mesmo nome que o programa");
+            throw new SemanticError("Nenhum identificador pode ter o mesmo nome que o programa", posicao);
         }
         if (tabelas.get(nivel).containsKey(nome)) {
             if (contexto.equals(l_decl)) {
-                throw new SemanticError("Id ja declarado");
+                throw new SemanticError("Id ja declarado", posicao);
             } else if (contexto.equals(l_parformal)) {
-                throw new SemanticError("Id de parametro repetido");
+                throw new SemanticError("Id de parametro repetido", posicao);
             } else {
                 return true;
             }
         } else {
             if (contexto.equals(l_leitura)) {
-                throw new SemanticError("Id nao declarado");
+                throw new SemanticError("Id nao declarado", posicao);
             }
             return false;
         }
@@ -395,7 +499,6 @@ public class Semantico implements Constants {
     private Simbolo createSimbolo(String nome, int nivel) {
         Simbolo simbolo = new Simbolo(nome, nivel);
         simbolo.putAtributo(a_nivel, nivel);
-        tabelas.get(nivel).put(nome, simbolo);
         return simbolo;
     }
     
@@ -418,6 +521,7 @@ public class Semantico implements Constants {
                 }
              
             default:
+                System.out.println(esquerdo + " " + direito);
                 return esquerdo == direito;
         }   
     }
