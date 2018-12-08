@@ -27,7 +27,12 @@ class Simbolo {
             atributos.remove(key);
     }
     Object getAtributo(String key){
+        if(atributos.containsKey(key)){
             return atributos.get(key);
+        }
+        else{
+            return new Object();
+        }
     }
     
 }

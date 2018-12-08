@@ -47,7 +47,7 @@ public class CompilaControlador {
 
 	public void analisarSintatico(String texto) throws LexicalError, SyntaticError, SemanticError {
 		lexico.setInput(texto);
-		semantico = new Semantico(true);
+		semantico = new Semantico(false);
 		sintatico.parse(lexico, semantico);
 	}
 	

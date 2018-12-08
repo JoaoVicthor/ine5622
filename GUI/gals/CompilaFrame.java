@@ -50,8 +50,6 @@ public class CompilaFrame extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -62,6 +60,10 @@ public class CompilaFrame extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(900, 650));
@@ -77,8 +79,8 @@ public class CompilaFrame extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 12;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         jPanel1.add(jScrollPane1, gridBagConstraints);
 
@@ -87,38 +89,12 @@ public class CompilaFrame extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 5;
         gridBagConstraints.gridy = 1;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.gridheight = 12;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridheight = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.VERTICAL;
         jPanel1.add(jScrollPane3, gridBagConstraints);
-
-        jButton1.setText("Análise Léxica");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel1.add(jButton1, gridBagConstraints);
-
-        jButton2.setText("Análise Sintática");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 14;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel1.add(jButton2, gridBagConstraints);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -185,57 +161,46 @@ public class CompilaFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setText("Analise");
+        jMenu3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu3ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem7.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem7.setText("Lexica");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem7);
+
+        jMenuItem8.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem8.setText("Sintatica");
+        jMenuItem8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem8);
+
+        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem9.setText("Semantica");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem9);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            this.controlador.analisarSintatico(jTextArea1.getText().replaceAll("\r\n", "\n"));
-            JOptionPane.showMessageDialog(this, "Codigo correto sintaticamente");
-        } catch (LexicalError ex) {
-            jTable1.setModel(new DefaultTableModel(colNames, 0));
-            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Lexico.",OK_CANCEL_OPTION);
-            jTextArea1.requestFocusInWindow();
-            jTextArea1.setCaretPosition(ex.getPosition());
-        } catch (SyntaticError ex) {
-            jTable1.setModel(new DefaultTableModel(colNames, 0));
-                        System.out.println(jTextArea1.getText());
-
-            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Sintatico.",OK_CANCEL_OPTION);
-            jTextArea1.requestFocusInWindow();
-            jTextArea1.setCaretPosition(ex.getPosition());
-        } catch (SemanticError ex) {
-            jTable1.setModel(new DefaultTableModel(colNames, 0));
-            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Semantico.",OK_CANCEL_OPTION);
-            jTextArea1.requestFocusInWindow();
-            jTextArea1.setCaretPosition(ex.getPosition());
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            List<Token> tokens;
-            tokens = this.controlador.analisarLexico(jTextArea1.getText().replaceAll("\r\n", "\n"));
-            DefaultTableModel newModel = new DefaultTableModel(colNames, 0);
-            for(Token t : tokens){
-                Object[] o = new Object[3];
-                o[0] = t.getId();
-                o[1] = t.getLexeme();
-                o[2] = t.getPosition();
-                newModel.addRow(o);
-            }
-            jTable1.setModel(newModel);
-            JOptionPane.showMessageDialog(this, "Código correto lexicamente");
-            
-        } catch (LexicalError ex) {
-            jTable1.setModel(new DefaultTableModel(colNames, 0));
-            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Lexico.",OK_CANCEL_OPTION);
-            jTextArea1.requestFocusInWindow();
-            jTextArea1.setCaretPosition(ex.getPosition());
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         int returnVal = fileChooser.showOpenDialog(this);
@@ -272,13 +237,84 @@ public class CompilaFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu3ActionPerformed
+
+    private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
+try {
+            this.controlador.analisarSintatico(jTextArea1.getText().replaceAll("\r\n", "\n"));
+            JOptionPane.showMessageDialog(this, "Codigo correto sintaticamente");
+        } catch (LexicalError ex) {
+            jTable1.setModel(new DefaultTableModel(colNames, 0));
+            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Lexico.",OK_CANCEL_OPTION);
+            jTextArea1.requestFocusInWindow();
+            jTextArea1.setCaretPosition(ex.getPosition());
+        } catch (SyntaticError ex) {
+            jTable1.setModel(new DefaultTableModel(colNames, 0));
+                        System.out.println(jTextArea1.getText());
+
+            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Sintatico.",OK_CANCEL_OPTION);
+            jTextArea1.requestFocusInWindow();
+            jTextArea1.setCaretPosition(ex.getPosition());
+        } catch (SemanticError ex) {
+            jTable1.setModel(new DefaultTableModel(colNames, 0));
+            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Semantico.",OK_CANCEL_OPTION);
+            jTextArea1.requestFocusInWindow();
+            jTextArea1.setCaretPosition(ex.getPosition());
+}    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+try {
+            this.controlador.analisarSemantico(jTextArea1.getText().replaceAll("\r\n", "\n"));
+            JOptionPane.showMessageDialog(this, "Codigo correto semanticamente");
+        } catch (LexicalError ex) {
+            jTable1.setModel(new DefaultTableModel(colNames, 0));
+            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Lexico.",OK_CANCEL_OPTION);
+            jTextArea1.requestFocusInWindow();
+            jTextArea1.setCaretPosition(ex.getPosition());
+        } catch (SyntaticError ex) {
+            jTable1.setModel(new DefaultTableModel(colNames, 0));
+                        System.out.println(jTextArea1.getText());
+
+            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Sintatico.",OK_CANCEL_OPTION);
+            jTextArea1.requestFocusInWindow();
+            jTextArea1.setCaretPosition(ex.getPosition());
+        } catch (SemanticError ex) {
+            jTable1.setModel(new DefaultTableModel(colNames, 0));
+            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Semantico.",OK_CANCEL_OPTION);
+            jTextArea1.requestFocusInWindow();
+            jTextArea1.setCaretPosition(ex.getPosition());
+}    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+try {
+            List<Token> tokens;
+            tokens = this.controlador.analisarLexico(jTextArea1.getText().replaceAll("\r\n", "\n"));
+            DefaultTableModel newModel = new DefaultTableModel(colNames, 0);
+            for(Token t : tokens){
+                Object[] o = new Object[3];
+                o[0] = t.getId();
+                o[1] = t.getLexeme();
+                o[2] = t.getPosition();
+                newModel.addRow(o);
+            }
+            jTable1.setModel(newModel);
+            JOptionPane.showMessageDialog(this, "Código correto lexicamente");
+            
+        } catch (LexicalError ex) {
+            jTable1.setModel(new DefaultTableModel(colNames, 0));
+            int i = JOptionPane.showConfirmDialog(this, ex.getMessage(), "Erro Lexico.",OK_CANCEL_OPTION);
+            jTextArea1.requestFocusInWindow();
+            jTextArea1.setCaretPosition(ex.getPosition());
+}    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFileChooser fileChooser;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -286,6 +322,9 @@ public class CompilaFrame extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
