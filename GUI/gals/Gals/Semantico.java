@@ -38,8 +38,10 @@ public class Semantico implements Constants {
     String operador;
 
     boolean metTemTipo;
+    boolean retorneUsado = false;
     boolean opNega;
     boolean opUnario;
+    boolean divisao;
 
     String nomeDoPrograma;
     String categoriaAtual;
@@ -108,6 +110,9 @@ public class Semantico implements Constants {
                     }
 
                     for (Simbolo s : LID) {
+                    	if(tabelas.get(nivelAtual).containsKey((String) s.getAtributo(a_nome))){
+                    		throw new SemanticError("Ids só podem ser declarados uma vez", posicao);
+                    	}
                         tabelas.get(nivelAtual).put((String) s.getAtributo(a_nome), s);
                     }
                     LID.clear();
@@ -218,8 +223,15 @@ public class Semantico implements Constants {
                     break;
 
                 case 120:
+                	if ((Integer) getSimbolo(metodoAtual).getAtributo(a_tipovar) != t_nulo) {
+                		if(!retorneUsado) {
+                			 throw new SemanticError("Metodo com tipo precisa de retorno", posicao);
+                		}
+                	}
+                	else {
                     tabelas.remove(nivelAtual);
                     nivelAtual--;
+                	}
 
                 case 121:
                     contextoLID = l_parformal;
@@ -247,6 +259,7 @@ public class Semantico implements Constants {
                 case 124:
                     if (tipoAtual != t_cadeia) {
                         getSimbolo(metodoAtual).putAtributo(a_tipovar, tipoAtual);
+                        metTemTipo = true;
                     } else {
                         throw new SemanticError("Metodos devem ser de tipo predefinido", posicao);
                     }
@@ -287,10 +300,12 @@ public class Semantico implements Constants {
                     break;
 
                 case 132:
+                	
                     if (metodoAtual != null) {
                         if ((Integer) getSimbolo(metodoAtual).getAtributo(a_tipovar) != t_nulo) {
                             if (tipoExpr != (Integer) getSimbolo(metodoAtual).getAtributo(a_tipovar)) {
                                 throw new SemanticError("Tipo de retorno Invalido", posicao);
+                            
                             }
                         } else {
                             throw new SemanticError("Retorne so pode ser usado em metodo com tipo", posicao);
@@ -298,7 +313,7 @@ public class Semantico implements Constants {
                     } else {
                         throw new SemanticError("Retorne so pode ser usado em metodo com tipo", posicao);
                     }
-
+                    retorneUsado = true;
                     break;
 
                 case 133:
@@ -482,11 +497,17 @@ public class Semantico implements Constants {
                     break;
 
                 case 158:
+               
                     if (getTipoResultadoExp(tipoFator, tipoTermo) == -1) {
                         throw new SemanticError("Operandos incompativeis", posicao);
                     } else {
+                         if(operador.equals("/")) {
+                        	 tipoTermo = getTipoResultadoMultExp(tipoFator, tipoTermo);
+                         }
+                         else {
                         tipoTermo = getTipoResultadoExp(tipoFator, tipoTermo);
-                    }
+                         }
+                         }
                     break;
 
                 case 159:
@@ -513,7 +534,7 @@ public class Semantico implements Constants {
                     break;
 
                 case 165:
-                    if (opUnario) {
+                    if (opUnario || operador.equals("-")) {
                         throw new SemanticError("Operador 'unario' repetido", posicao);
                     } else {
                         opUnario = true;
@@ -724,10 +745,25 @@ public class Semantico implements Constants {
                 return esquerdo == direito;
         }
     }
-
-    private int getTipoResultadoExp(int a, int b) {
+    private int getTipoResultadoMultExp(int a, int b) {
         if ((a == t_real && b == t_inteiro)
                 || b == t_real && a == t_inteiro) {
+            return t_real;
+        } else if (a == b) {
+        	if(a ==t_inteiro) {
+        		return t_real;
+        	}
+        	else {
+            return a;
+        	}
+        } else {
+            return -1;
+        }
+    }
+    
+    private int getTipoResultadoExp(int a, int b) {
+        if ((a == t_real && b == t_inteiro)
+                || b == t_real && a == t_inteiro ) {
             return t_real;
         } else if (a == b) {
             return a;
