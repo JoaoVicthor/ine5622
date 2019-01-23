@@ -111,7 +111,7 @@ public class Semantico implements Constants {
 
                     for (Simbolo s : LID) {
                     	if(tabelas.get(nivelAtual).containsKey((String) s.getAtributo(a_nome))){
-                    		throw new SemanticError("Ids só podem ser declarados uma vez", posicao);
+                    		throw new SemanticError("Ids sï¿½ podem ser declarados uma vez", posicao);
                     	}
                         tabelas.get(nivelAtual).put((String) s.getAtributo(a_nome), s);
                     }
@@ -279,6 +279,7 @@ public class Semantico implements Constants {
 
                 case 128:
                     if (checkDeclId(lexeme, nivelAtual, l_leitura)) {
+                        System.out.println("chega aqui");
                         idAtual = lexeme;
                     }
                     break;
@@ -572,6 +573,7 @@ public class Semantico implements Constants {
                         if (!getSimbolo(idAtual).getAtributo(a_tipovar).equals(t_nulo)) {
                             numParamAtuais = 0;
                             contextoEXPR = e_par;
+                            
                         } else {
                             throw new SemanticError("Esperava-se metodo com tipo", posicao);
                         }
@@ -599,6 +601,7 @@ public class Semantico implements Constants {
                     break;
 
                 case 174:
+                    System.out.println("idAtual Ã©: " + idAtual);
                     if (getSimbolo(idAtual).getAtributo(a_categoria).equals(c_variavel)
                             || getSimbolo(idAtual).getAtributo(a_categoria).equals(c_parametro)) {
                         if (!getSimbolo(idAtual).getAtributo(a_subcateg).equals(s_vetor)) {
@@ -636,26 +639,31 @@ public class Semantico implements Constants {
                 case 176:
                     tipoConst = t_inteiro;
                     valConst = lexeme;
+                    MPP = m_val;
                     break;
 
                 case 177:
                     tipoConst = t_real;
                     valConst = lexeme;
+                    MPP = m_val;
                     break;
 
                 case 178:
                     tipoConst = t_booleano;
                     valConst = lexeme;
+                    MPP = m_val;
                     break;
 
                 case 179:
                     tipoConst = t_booleano;
                     valConst = lexeme;
+                    MPP = m_val;
                     break;
 
                 case 180:
                     tipoConst = t_cadeia;
                     valConst = lexeme;
+                    MPP = m_val;
                     break;
             }
         } else {
@@ -674,7 +682,7 @@ public class Semantico implements Constants {
 
     Simbolo getSimbolo(String nome) throws SemanticError {
         for (int nivel = nivelAtual; nivel >= 0; nivel--) {
-            System.out.println(tabelas.get(nivel).containsKey(nome));
+            System.out.println("getSimbolo: "+ nome + " " + tabelas.get(nivel).containsKey(nome));
                 if (tabelas.get(nivel).containsKey(nome)) {
                     return tabelas.get(nivel).get(nome);
                 }
@@ -684,7 +692,7 @@ public class Semantico implements Constants {
     
     boolean checkIfDecl(String nome){
         for (int nivel = nivelAtual; nivel >= 0; nivel--) {
-            System.out.println(tabelas.get(nivel).containsKey(nome));
+            System.out.println("checkIfDecl: " + nome + " " + tabelas.get(nivel).containsKey(nome));
                     if (tabelas.get(nivel).containsKey(nome)) {
                     return true;
                 }
@@ -702,21 +710,27 @@ public class Semantico implements Constants {
         if (nome.equals(nomeDoPrograma)) {
             throw new SemanticError("Nenhum identificador pode ter o mesmo nome que o programa", posicao);
         }
-        if (checkIfDecl(nome)) {
-            if (contexto.equals(l_decl)) {
+        
+        if (contexto.equals(l_decl)) {
+            if (tabelas.get(nivel).containsKey(nome)) {
                 throw new SemanticError("Id ja declarado", posicao);
-            } else if (contexto.equals(l_parformal)) {
-                throw new SemanticError("Id de parametro repetido", posicao);
-            } else {
-                return true;
-            }
-        } else {
-            if (contexto.equals(l_leitura)) {
-                throw new SemanticError("Id nao declarado", posicao);
             } else {
                 return false;
             }
         }
+        else if (contexto.equals(l_parformal)) {
+            if(tabelas.get(nivel).containsKey(nome)){ 
+                throw new SemanticError("Id de parametro repetido", posicao);
+            } else {
+                return false;
+            }
+        }
+        else if (contexto.equals(l_leitura)) {
+            if(!checkIfDecl(nome)){
+                throw new SemanticError("Id nao declarado", posicao);
+            }
+        }
+        return true;
     }
 
     private Simbolo createSimbolo(String nome, int nivel) {
