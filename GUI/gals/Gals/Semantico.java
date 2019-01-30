@@ -194,8 +194,17 @@ public class Semantico implements Constants {
 
                 case 115:
                     if (!comparaTipos(tipoAtual, tipoConst)) {
+                    	
+                    	if(tipoConst == t_cadeia && lexeme.length()-2 ==1  ) {
+                    	tipoConst =t_caracter;
+                    	}
+                    	
+                    	else {
+                    		
                         throw new SemanticError("Tipo da constante incorreto", posicao);
+                    	}
                     }
+                    
                     break;
 
                 case 116:
