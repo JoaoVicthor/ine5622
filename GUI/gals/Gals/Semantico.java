@@ -194,17 +194,13 @@ public class Semantico implements Constants {
 
                 case 115:
                     if (!comparaTipos(tipoAtual, tipoConst)) {
-                    	
-                    	if(tipoConst == t_cadeia && lexeme.length()-2 ==1  ) {
-                    	tipoConst =t_caracter;
-                    	}
-                    	
-                    	else {
-                    		
+                        if(tipoConst == t_cadeia && lexeme.length()-2 ==1) {
+                        tipoConst = t_caracter;
+                        }
+                        else {
                         throw new SemanticError("Tipo da constante incorreto", posicao);
-                    	}
+                        }
                     }
-                    
                     break;
 
                 case 116:
@@ -387,6 +383,7 @@ public class Semantico implements Constants {
                 case 138:
                     numParamAtuais = 0;
                     contextoEXPR = e_par;
+                    MPP = m_ref;
                     break;
 
                 case 139:
@@ -414,14 +411,20 @@ public class Semantico implements Constants {
                     break;
 
                 case 141:
+                    System.out.println(e_par);
                     if (contextoEXPR.equals(e_par)) {
                         numParamAtuais++;
                         ArrayList<Simbolo> listaParam = (ArrayList<Simbolo>) getSimbolo(metodoAtual).getAtributo(a_listaParam);
                         if (MPP.equals(listaParam.get(numParamAtuais - 1).getAtributo(a_MPP))) {
                             if (!comparaTipos(tipoExpr, (Integer) listaParam.get(numParamAtuais - 1).getAtributo(a_tipovar))) {
+                                System.out.println("Tipo esperado: " + listaParam.get(numParamAtuais - 1).getAtributo(a_tipovar) + " Tipo que veio: " + tipoExpr);
                                 throw new SemanticError("Tipo de expressão diferente do esperado", posicao);
                             }
+                            else{
+                                MPP = m_ref;
+                            }
                         } else {
+                            System.out.println("Tipo esperado: " + listaParam.get(numParamAtuais - 1).getAtributo(a_MPP) + " Tipo que veio: " + MPP);
                             throw new SemanticError("Metodo de passagem de parametro diferente do esperado", posicao);
                         }
                     } else if (contextoEXPR.equals(e_impr)) {
@@ -452,6 +455,7 @@ public class Semantico implements Constants {
                 case 148:
                 case 149:
                     operador = lexeme;
+                    MPP = m_val;
                     break;
 
                 case 150:
@@ -483,6 +487,7 @@ public class Semantico implements Constants {
                 case 154:
                 case 155:    
                     operador = lexeme;
+                    MPP = m_val;
                     break;
 
                 case 156:
@@ -525,6 +530,7 @@ public class Semantico implements Constants {
                 case 161:
                 case 162:    
                     operador = lexeme;
+                    MPP = m_val;
                     break;
 
                 case 163:
@@ -532,6 +538,7 @@ public class Semantico implements Constants {
                         throw new SemanticError("Operador 'nao' repetido nao pode!", posicao);
                     } else {
                         opNega = true;
+                        MPP = m_val;
                     }
                     break;
 
@@ -540,6 +547,7 @@ public class Semantico implements Constants {
                         throw new SemanticError("Operador 'nao' exige operando booleano", posicao);
                     } else {
                         opNega = false;
+                        MPP = m_val;
                     }
                     break;
 
@@ -548,6 +556,7 @@ public class Semantico implements Constants {
                         throw new SemanticError("Operador 'unario' repetido", posicao);
                     } else {
                         opUnario = true;
+                        MPP = m_val;
                     }
                     break;
 
@@ -556,6 +565,7 @@ public class Semantico implements Constants {
                         throw new SemanticError("Operador unario exige operando numero", posicao);
                     } else {
                         opUnario = false;
+                        MPP = m_val;
                     }
                     break;
 
@@ -566,10 +576,10 @@ public class Semantico implements Constants {
 
                 case 168:
                     tipoFator = tipoExpr;
+                    MPP = m_val;
                     break;
 
                 case 169:
-                    
                     tipoFator = tipoAtual;
                     break;
 
@@ -594,6 +604,7 @@ public class Semantico implements Constants {
                 case 172:
                     if (numParamAtuais == numParamFormais) {
                         tipoAtual = (Integer) getSimbolo(idAtual).getAtributo(a_tipovar);
+                        MPP = m_val;
                     } else {
                         throw new SemanticError("Erro na quantidade de parametros", posicao);
                     }
